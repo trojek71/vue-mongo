@@ -16,27 +16,27 @@
           <td>{{ user.address.street }}</td>
          
          <td>
-          <input type="button" @click="selectContact(user)" value="Select">
-          <input type="button" @click="deleteContact(contact.id)" value="Delete">
+          <input type="button" @click="selectUser(user)" value="Select">
+          <input type="button" @click="deleteUser(user.id)" value="Delete">
          </td> 
        </tr>
      </table>
      <br>
         <form>
           <label>First Name</label>
-          <input type="text" name="firstName" v-model="firstName">
+          <input type="text" name="Name" v-model="name">
           <br>
     
-          <label>Last Name</label>
-          <input type="text" name="lastName" v-model="lastName">
-          <br>
-    
+     
           <label>Email</label>
           <input type="email" name="email" v-model="email">
           <br>
-          
-          <input v-if="!id" type="button" @click="createContact(firstName, lastName, email)" value="Add">
-          <input v-if="id" type="button" @click="updateContact(id, firstName, lastName, email)" value="Update">
+          <label>City</label>
+          <input type="text" name="City" v-model="city">
+          <br>
+
+          <input v-if="!id" type="button" @click="createUser(name, email)" value="Add">
+          <input v-if="id" type="button" @click="updateUser(name, email)" value="Update">
           <input type="button" @click="clearForm()" value="Clear">
           
         </form>
@@ -51,6 +51,7 @@ export default {
   name: 'App',
   data(){
         return {
+          users:{},
           id: null,
           name: '',
           email: '',
@@ -71,8 +72,64 @@ export default {
         }`,
       },
  
-}
 
+methods: {
+        createUser(name, email){
+          console.log(`Create contact: ${email}`)
+          this.$apollo.mutate({
+              mutation: gql`mutation createContact($firstName: String!, $lastName: String!, $email: String!){
+                createContact(firstName: $firstName, lastName: $lastName, email: $email) {
+                  id,
+                  firstName,
+                  lastName,
+                  email}
+              }`,
+              variables:{
+                firstName: name,
+               
+                email: email
+              }
+            }
+          )
+          location.reload();
+        },
+        updateContact(id, firstName, lastName, email){
+          console.log(`Update contact: # ${id}`)
+          this.$apollo.mutate({
+              mutation: gql`mutation updateContact($id: ID!, $firstName: String!, $lastName: String!, $email: String!){
+                updateContact(id: $id, firstName: $firstName, lastName: $lastName, email: $email)
+              `,
+              variables:{
+                id: id,
+                firstName: firstName,
+                lastName: lastName,
+                email: email
+              }
+            }
+          )
+          location.reload();
+        },
+        deleteContact(id){
+          console.log(`Delete contact: # ${id}`)
+          this.$apollo.mutate({
+              mutation: gql`mutation deleteContact($id: ID!){
+                deleteContact(id: $id)
+              }`,
+              variables:{
+                id: id,
+              }
+            }
+          )
+          location.reload();
+        },  
+        selectUser(user){
+          this.id = user.id;
+          this.name = user.name;
+          this.email = user.email;
+          this.city= user.address.city
+        },  
+      }
+}
 </script>
 
 <style>
