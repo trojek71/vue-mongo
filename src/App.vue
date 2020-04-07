@@ -34,7 +34,9 @@
           <label>City</label>
           <input type="text" name="City" v-model="city">
           <br>
-
+          <label>Street</label>
+          <input type="text" name="Street" v-model="street">
+          <br>
           <input v-if="!id" type="button" @click="createUser(name, email)" value="Add">
           <input v-if="id" type="button" @click="updateUser(name, email)" value="Update">
           <input type="button" @click="clearForm()" value="Clear">
@@ -127,6 +129,7 @@ methods: {
           this.name = user.name;
           this.email = user.email;
           this.city= user.address.city
+          this.street= user.address.street
         },  
       }
 }
