@@ -7,7 +7,7 @@ require('dotenv').config()
 Vue.config.productionTip = false
 
 const apolloClient = new ApolloClient({
-  uri:"http://trojek.sytes.net:4000/graphql"
+  uri:"http://localhost:4000/graphql"
 
   
 })
