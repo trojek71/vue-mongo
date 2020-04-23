@@ -19,7 +19,7 @@
          
          <td>
           <input type="button" @click="selectUser(user)" value="Select">
-          <input type="button" @click="delUser(name)" value="Delete">
+          <input type="button" @click="delUser(user.name)" value="Delete">
          </td> 
        </tr>
      </table>
@@ -55,7 +55,13 @@ import gql from 'graphql-tag'
 const DEL_USER = gql`
    mutation deleteUser($name: String!) {
      deleteUser(name:$name) {
-       name
+       name,
+       userId,
+       email,
+       address{
+         city,
+         street
+       }
      }
        
       
@@ -149,10 +155,12 @@ methods: {
               variables:{
                 name: name,
                 
+
+                
                 },
             }
           )
-      location.reload();
+     location.reload();
         },    
         selectUser(user){
           this.userId = user.userId;
